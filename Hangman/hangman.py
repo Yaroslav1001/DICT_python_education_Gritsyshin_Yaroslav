@@ -1,15 +1,39 @@
-import random
+from random import choice
 
-print("HANGMAN\nThe game will be available soon.")
+print("HANGMAN")
 
-text = ["python", "java", "javascript", "swift"]
-while True:
-    print("Hangman")
-    rand = random.choice(text)
-    symb = '-' * len(rand[3:])
-    print(rand[:3] + symb)
-    gue = input("Guess the word:>")
-    if gue == rand:
-        print("You survived!")
+text = ("python", "java", "javascript", "swift")
+rand = choice(text)
+symb = '-' * len(rand)
+attempt = 8
+wrong = 0
+used = []
+
+while wrong < attempt and symb != rand:
+    print('\n', symb)
+
+    guess = input('\nInput a letter: >')
+
+    while guess in used:
+        print(guess)
+        guess = input('input a latter: >')
+
+    used.append(guess)
+
+    if guess in rand:
+        new = ''
+        for i in range(len(rand)):
+            if guess == rand[i]:
+                new += guess
+            else:
+                new += symb[i]
+        symb = new
     else:
-        print("You lost!")
+        print('\nThat letter doesn\'t appear in the word')
+        wrong += 1
+
+if wrong == attempt:
+    print('\nYou lost!')
+
+else:
+    print("\nThanks for playing! \nWe'll see how well you did in the next stage")
