@@ -2,20 +2,22 @@ from random import choice
 
 print("HANGMAN")
 
+attempt = 8
 text = ("python", "java", "javascript", "swift")
+
 rand = choice(text)
 symb = '-' * len(rand)
-attempt = 8
 wrong = 0
 used = []
 
 while wrong < attempt and symb != rand:
     print('\n', symb)
-
     guess = input('\nInput a letter: >')
+    wrong += 1
 
-    while guess in used:
-        print(guess)
+    if guess in used:
+        print('\n', symb)
+        print("\nNo improvements")
         guess = input('input a latter: >')
 
     used.append(guess)
@@ -30,7 +32,7 @@ while wrong < attempt and symb != rand:
         symb = new
     else:
         print('\nThat letter doesn\'t appear in the word')
-        wrong += 1
+
 
 if wrong == attempt:
     print('\nYou lost!')
