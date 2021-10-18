@@ -15,3 +15,12 @@ rem7 = int(input("remainder7>"))
 age = (rem3 * 70 + rem5 * 21 + rem7 * 15) % 150
 print("Your age is", age, "; that's a good time to start programming!")
 # считает по формуле ,  выводит текст с результатом расчетов
+
+print("Now I will prove to you that I can count to any number you want.")
+x = 0
+y = int(input(">"))
+while x <= y:
+    print(x, "!")
+    x += 1
+# запрашивает целое число и ведет посчет он 0 до заданного числа
+print("Completed, have a nice day!")
