@@ -24,3 +24,30 @@ while x <= y:
     x += 1
 # запрашивает целое число и ведет посчет он 0 до заданного числа
 print("Completed, have a nice day!")
+
+print("Let's test your programming knowledge.")
+
+
+def says_pro():
+    # цикл, который повторяется, пока значение не = 1
+    while True:
+        # выводит текст и запрашивает значение
+        ans = int(input("""
+What is Debugging??
+1. It is the process of finding and fixing bugs in a program.
+2. The process that causes the headache.
+3. Value output method.
+4. An object that takes arguments and returns a value.
+>"""))
+        # если значение = 1, выводит текст и завершает работу
+        if ans == 1:
+            print("Completed, have a nice day!")
+            if ans == 1:
+                print("Congratulations, have a nice day!")
+                break
+# если значение не = 1, выводит текст и цикл выполняется снова
+        else:
+            print("Please, try again.")
+
+
+says_pro()
