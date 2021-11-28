@@ -5,7 +5,16 @@ while True:
         name = [input() for x in range(comrades)]
         dict = {name[y - 1]: 0 for y in range(1, comrades + 1)}
         print(dict)
-        break
+        price = int(input("Enter the total amount: "))
+        if int(price / comrades) != (price / comrades):
+            list_amount = [round((price/ comrades), 2)] * comrades
+        else:
+            list_amount = [round(price / comrades)] * comrades
+        dk = list(dict.keys())
+        dk.sort()
+        for x in range(len(dk)):
+            dict[dk[x]] = list_amount[x]
+        print(dict)
     elif comrades < 0:
         print("It can't be!")
         continue
