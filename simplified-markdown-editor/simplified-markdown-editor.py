@@ -3,24 +3,25 @@ class MarkdownEditor:
     def __init__(self):
         self.selected_format = None
         self.content = ""
+        self.on_help_message = True
 
     reserved_characters = ("*", "**", "```", "#")
 
-    format = ("plain", "bold", "italic", "header",
-              "link", "inline-code", "ordered",
-              "list", "unordered-list", "new-line")
+    available_formatters = ("plain", "bold", "italic", "header",
+                            "link", "inline-code", "ordered-list",
+                            "unordered-list", "new-line")
 
     special_commands = "!help", "!done"
 
-    commands = (*format, *special_commands)
+    all_commands = (*available_formatters, *special_commands)
 
     def show_help(self):
-        print("Available formatters:", *self.format)
+        print("Available formatters:", *self.available_formatters)
         print("Special commands:", *self.special_commands)
 
     def correctly_input_command(self, string):
         user_input = input(string)
-        while user_input not in self.commands:
+        while user_input not in self.all_commands:
             if not user_input:
                 print("If you do not know what to do write command !help")
                 user_input = input(string)
@@ -36,7 +37,7 @@ class MarkdownEditor:
             self.menu_options()
 
         elif option == "!done":
-
+            self.add_markup(self.content)
             return
 
         elif option == "plain":
@@ -139,6 +140,13 @@ class MarkdownEditor:
                 break
 
         return user_input
+
+    @staticmethod
+    def add_markup(content):
+        file = open("output.md", "w")
+        file.write(content)
+        file.close()
+        print("Save successfully")
 
 
 mde = MarkdownEditor()
