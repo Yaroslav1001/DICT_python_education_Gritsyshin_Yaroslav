@@ -1,11 +1,44 @@
-import json
-from io import StringIO
+import requests
+from bs4 import BeautifulSoup
+from pprint import pprint
 
-# json.dumps(['foo', {'bar': ('baz', None, 1.0, 2)}])
-# print(json.dumps("\"foo\bar"))
-# print(json.dumps('\u1234'))
-# print(json.dumps('\\'))
-# print(json.dumps({"c": 0, "b": 0, "a": 0}, sort_keys=True))
 
-io = StringIO('[https://api.quotable.io/quotes/-CzNrWMGIg8V]')
-json.load(io)
+def parser_json():
+    url = url_input("Pleas input URL >")
+    response = requests.get(url)
+    if response.ok:
+        result = response.json()
+        print(result.get('content'))
+
+    else:
+        print("Invalid quote resource!")
+
+
+def web_parser():
+    url = url_input("Please input URL >")
+    response = requests.get(url, headers={'Accept-Language': 'en-US,en;q=0.5'})
+
+    try:
+        html_content = response.text
+        soup = BeautifulSoup(html_content, 'html.parser')
+        title = soup.h1.string
+        form = soup.find('meta', {'name': 'description'})
+        if not title or not form:
+            raise AttributeError()
+        page_info = {"title": title, "description": form["content"]}
+        pprint(page_info)
+
+    except AttributeError:
+        print("Invalid movie page!")
+
+
+def url_input(string):
+    url = input(string)
+    if url.startswith('http://'):
+        return url
+    elif url.startswith('https://'):
+        return url
+    print("URL mast begin with http:// or https://")
+    url_input(string)
+
+web_parser()
