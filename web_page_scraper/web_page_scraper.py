@@ -32,6 +32,21 @@ def web_parser():
         print("Invalid movie page!")
 
 
+def save_page():
+    url = url_input("Please input URL >")
+    response = requests.get(url)
+    if response.ok:
+        saving_content(response.content)
+    else:
+        print(f"The URL returned {response.status_code}")
+
+
+def saving_content(page):
+    with open("web_page.html", "wb") as f:
+        f.write(page)
+        print("Content saved.")
+
+
 def url_input(string):
     url = input(string)
     if url.startswith('http://'):
@@ -41,4 +56,5 @@ def url_input(string):
     print("URL mast begin with http:// or https://")
     url_input(string)
 
-web_parser()
+
+save_page()
