@@ -1,10 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 import shutil
-from os import mkdir
+import os
 import string
 
-BASE_URL = "https://www.nature.com/nature/articles?sort=PubDate&year=2022&page=3"
+BASE_URL = "https://www.nature.com/nature/articles"
 
 
 def simple_parser():
@@ -51,17 +51,35 @@ def save_in_file(page):
         print("Content saved.")
 
 
-def parsing_articles():
-    shutil.rmtree("articles")
-    response = requests.get(BASE_URL)
-    if response.ok:
-        links = get_tuple_links(response)
-        print("Determine what articles you need, this may take some time...")
-        mkdir("articles")
-        save_all_article(links)
+def correct_input_number(string):
+    user_input = input(string)
+    while True:
+        try:
+            number = int(user_input)
+            return number
+        except ValueError:
+            user_input = input(string)
+            print("Please input integer number")
 
-    else:
-        print(f"The URL returned {response.status_code}")
+
+def parsing_articles():
+    pages = correct_input_number("How many pages: > ")
+    article_type = input("Articles type: > ")
+    if os.path.exists("articles"):
+        shutil.rmtree("articles")
+    for i in range(1, pages + 1):
+        print(f"Page {i}:")
+        url = f"{BASE_URL}?sort={article_type}&year=2022&page={i}"
+        response = requests.get(url)
+        if response.ok:
+            links = get_tuple_links(response)
+            print("Determine what articles you need, this may take some time...")
+            if not os.path.exists("articles"):
+                os.mkdir("articles")
+            save_all_article(links, i)
+
+        else:
+            print(f"The {url} returned {response.status_code}")
 
 
 def correct_input_url(string):
@@ -105,23 +123,28 @@ def get_article_by_path(path):
         return article_content
 
 
-def save_all_article(links):
+def save_all_article(links, page):
     for link in links:
         name, path = link
         article = get_article_by_path(path)
         if not article:
             continue
-        save_article(name, article)
+        save_article(name, article, page)
 
 
-def save_article(name: string, content):
+def save_article(name: string, content, page):
     table = name.maketrans("", "", string.punctuation + "’")
     title = name.translate(table)
     title = title.strip().replace(" ", "_")
 
     print("Title: ", title)
-    with open(f"articles/{title}.txt", "w") as f:
+    path = f"articles/page_{page}"
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    with open(f"{path}/{title}.txt", "w") as f:
         f.write(content)
         print("Article saved.")
+
 
 parsing_articles()
